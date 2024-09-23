@@ -1,12 +1,12 @@
 import axios from "axios";
 import { HttpsProxyAgent } from "https-proxy-agent";
 
-async function fetchAndSaveHTML( proxySession, url) {
+async function fetchAndSaveHTML(url) {
   // Proxy credentials
 
-  // Create the proxy agent
-  const agent = new HttpsProxyAgent(proxyUrl);
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Optionally disable SSL cert check
+  // // Create the proxy agent
+  // const agent = new HttpsProxyAgent(proxyUrl);
+  // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Optionally disable SSL cert check
 
   const config = {
     method: "get",
@@ -21,18 +21,20 @@ async function fetchAndSaveHTML( proxySession, url) {
       "Accept-Encoding": "gzip, deflate, br, zstd",
     },
     // Use the HTTPS proxy agent
-    httpsAgent: agent,
+    // httpsAgent: agent,
   };
 
   try {
     const response = await axios.request(config);
-    console.log(`Random session number: ${proxySession}`);
+    // console.log(`Random session number: ${proxySession}`);
     console.log(`HTTP Status: ${response.status}`);
 
     // Write the response data (HTML content) to the specified file
     // await fs.writeFil, response.data);
     if (response.status === 200) {
-      return 200;
+      const data = response.data;
+      console.log("Data:", data);
+      return {data, status : 200};
     } else if (response.status === 202) {
       return 202;
     } else {
